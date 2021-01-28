@@ -1,5 +1,6 @@
 <?php require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/app/config/database.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/app/config/constants.php';
+require SITE_DIR . '/app/config/database.php';
 /** @var array $DB_CONFIG */
 use App\Core\Application;
 $application = Application::getInstance();
@@ -8,4 +9,6 @@ global $DATABASE;
 
 $router = $application->getRouter();
 $router->loadConfigfile();
-$router->generateRoutes();
+if ($router->generateRoutes()) {
+    $router->execute();
+}

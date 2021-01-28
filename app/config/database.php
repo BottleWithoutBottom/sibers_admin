@@ -2,7 +2,7 @@
 
 $DB_CONFIG = [
     'host' => 'localhost',
-    'dbname' => '',
-    'user' => 'root',
-    'password' => ''
+    'dbname' => 'sibers_admin',
+    'user' => 'newuser',
+    'password' => 'password'
 ];

@@ -32,18 +32,18 @@ class Router {
             $this->addRoute($route, $params);
         }
 
+        return true;
+
     }
 
     public function execute() {
         if (!$this->mount()) throw new \Exception('UNKNOWN ROUTE PATH');
-
-        $controllerPath = $_SERVER['DOCUMENT_ROOT'] . 'app/mvc/controllers/' . $this->params['controller'];
-
-        if (class_exists($controllerPath)) {
+        $controller = CONTROLLER_NAMESPACE . $this->params['controller'];
+        if (class_exists($controller)) {
             $action = $this->params['action'];
+            if (method_exists($controller, $action)) {
+                $controller = new $controller($this->params);
 
-            if (method_exists($controllerPath, $action)) {
-                $controller = new $controllerPath($this->params);
                 $controller->$action();
             }
         }
