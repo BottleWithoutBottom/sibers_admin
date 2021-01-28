@@ -22,7 +22,7 @@ class Router {
     }
 
     public function loadConfigfile() {
-        return require($_SERVER['DOCUMENT_ROOT'] . 'app/config/bootstrap.php');
+        return require(CONFIGS . 'bootstrap.php');
     }
 
     public function generateRoutes() {
@@ -43,7 +43,6 @@ class Router {
             $action = $this->params['action'];
             if (method_exists($controller, $action)) {
                 $controller = new $controller($this->params);
-
                 $controller->$action();
             }
         }
