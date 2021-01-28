@@ -5,5 +5,7 @@ use App\Core\Application;
 $application = Application::getInstance();
 $DATABASE = $application->getDBDriver($DB_CONFIG);
 global $DATABASE;
-while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($DATABASE);echo("</pre>");die();
-$request = $application->getRequest();
+
+$router = $application->getRouter();
+$router->loadConfigfile();
+$router->generateRoutes();
