@@ -46,16 +46,12 @@ class View {
     public function render($title, $params = []) {
         $header = LAYOUTS . static::HEADER . '.php';
         $footer = LAYOUTS . static::FOOTER . '.php';
-
         if (!file_exists($header) || !file_exists($footer)) throw new \Exception('footer or header was not found!');
-
         if (!empty($params)) extract($params);
-
         ob_start();
+        require (VIEWS_DIR . $this->template . '.php');
 
-        require (MVC_VIEWS . $this->template);
         $content = ob_get_clean();
-
         require $header;
         require $footer;
     }
