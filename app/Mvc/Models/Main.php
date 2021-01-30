@@ -2,6 +2,6 @@
 
 namespace App\Mvc\Models;
 
-class Main {
+class Main extends AbstractModel {
 
 }
