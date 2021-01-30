@@ -5,7 +5,8 @@ class DBDriver {
     protected static $instance;
     protected $PDO;
 
-    private function __construct($config) {
+    private function __construct() {
+        $config = $this->getConfig();
         try {
             $this->PDO = new PDO(
                 'mysql:host=' . $config['host'] . ';dbname=' . $config['dbname'] . ';',
@@ -17,9 +18,17 @@ class DBDriver {
         }
     }
 
-    public static function getInstance($config) {
-        if (!isset(static::$instance)) return new static($config);
+    public static function getInstance() {
+        if (!isset(static::$instance)) return new static();
 
         return static::$instance;
+    }
+
+    public function getPdo() {
+        return $this->PDO;
+    }
+
+    private function getConfig() {
+        return require(CONFIGS . 'database.php');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-$DB_CONFIG = [
+return [
     'host' => 'localhost',
     'dbname' => 'sibers_admin',
-    'user' => 'newuser',
-    'password' => 'password'
+    'user' => 'root',
+    'password' => 'mGQxoG'
 ];
