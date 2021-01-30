@@ -30,5 +30,9 @@ class Request {
         return $_POST;
     }
 
+    public function getUri() {
+        return $_SERVER['REQUEST_URI'];
+    }
+
 
 }

@@ -4,7 +4,10 @@ namespace App\Core;
 use mysql_xdevapi\Exception;
 
 class Router {
-    const CHILDREN = 'CHILDREN';
+    private const CHILDREN = 'children';
+    private const OPEN_TAG = '{';
+    private const CLOSE_TAG = '}';
+    private const VALUE_CLOSE_TAG = '/';
 
     protected static $instance;
     protected $routes;
@@ -53,22 +56,24 @@ class Router {
     protected function addRoute($route, $params) {
         if (!$route || !$params) return false;
 
-        $route_preg = $this->pregRoute($route);
-
-        $this->setRouteParams($route_preg, $params);
+        $this->setRouteParams($route, $params);
         $children = $params[static::CHILDREN];
         if (!empty($children)) {
             foreach ($children as $child => $childParams) {
-                $this->add($child, $childParams);
+                $this->addRoute($child, $childParams);
             }
         }
 
         return true;
     }
-
+    /** функция ищет роут, совпадающий с введенным uri */
     protected function mount() {
         foreach($this->routes as $route => $params) {
-            if (preg_match($route, $_SERVER['REQUEST_URI'])) {
+            $route_preg = $this->pregRoute($route);
+            $params['dynamicParams'] = $this->getDynamicParams($route);
+            $request = Request::getInstance();
+            $uri = $request->getUri();
+            if ($params['pattern'] && preg_match($params['pattern'], $uri) || preg_match($route_preg, $uri)) {
                 $this->setParams($params);
                 return true;
             }
@@ -89,5 +94,62 @@ class Router {
 
     protected function setParams($params) {
         $this->params = $params;
+    }
+
+    /** функция для извлечения динамических параметров из uri по маске роута */
+    private function getDynamicParams($route) {
+        $dynamicParams = [];
+        $request = Request::getInstance();
+        $uri = $request->getUri();
+        for ($i = 0; $i < strlen($route); $i ++) {
+            if ($route[$i] == static::OPEN_TAG) {
+                $dynamicParams[] = $this->parseParam($route, $uri, $i);
+            }
+        }
+
+        return $dynamicParams;
+    }
+
+    private function parseParam($route, $uri, $pos) {
+        // Начальная точка для извлечения параметра
+        $loopingPos = $pos;
+        $keyLength = 0;
+
+        // Ищем конечную точку для извлечения параметра
+        $closeTagFound = false;
+        while (!$closeTagFound) {
+            $loopingPos++;
+            $keyLength++;
+
+            if ($route[$loopingPos] == static::CLOSE_TAG) {
+                $closeTagFound = true;
+            }
+        }
+
+        $paramKey = substr($route, $pos + 1, $keyLength - 1);
+
+        //Ищем конечную точку для извлечения значения параметра из URI
+        $cutStartPos = $pos - 1;
+        $cutLoopingPos = $cutStartPos;
+
+        $valueLength = 0;
+        $closeTagValueFound = false;
+        while (!$closeTagValueFound) {
+            $cutStartPos++;
+            $valueLength++;
+
+            if ($uri[$cutStartPos] == static::VALUE_CLOSE_TAG) {
+                $closeTagValueFound = true;
+            }
+        }
+
+        // Если сразу же нашелся закрывающийся слеш, значит значение длинной в 1 символ
+        if ($valueLength == 1) {
+            $valueLength = 1;
+        } else {
+            $valueLength = $valueLength - 1;
+        }
+        $paramValue = substr($uri, $cutLoopingPos + 1, $valueLength);
+        return [$paramKey => $paramValue];
     }
 }
