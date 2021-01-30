@@ -5,7 +5,8 @@ RewriteBase /
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [L,QSA]
+
 </IfModule>
-#<Files "\.(png|img|css|js)$">
-#    Allow from all
-#</Files>
+<Files "\.(png|img|css|js)$">
+    Allow from all
+</Files>
