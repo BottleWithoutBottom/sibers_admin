@@ -47,7 +47,7 @@ class Router {
             $action = $this->params['action'];
             if (method_exists($controller, $action)) {
                 $controller = new $controller($this->params);
-                $controller->$action();
+                $controller->$action($this->params['dynamicParams']);
             } else {
                 View::Show404();
             }
@@ -108,10 +108,10 @@ class Router {
         $uri = $request->getUri();
         for ($i = 0; $i < strlen($route); $i ++) {
             if ($route[$i] == static::OPEN_TAG) {
-                $dynamicParams[] = $this->parseParam($route, $uri, $i);
+                $dynamicParam = $this->parseParam($route, $uri, $i);
+                $dynamicParams[$dynamicParam['key']] = $dynamicParam['value'];
             }
         }
-
         return $dynamicParams;
     }
 
@@ -155,6 +155,9 @@ class Router {
             $valueLength = $valueLength - 1;
         }
         $paramValue = substr($uri, $cutLoopingPos + 1, $valueLength);
-        return [$paramKey => $paramValue];
+        return [
+            'key' => $paramKey ,
+            'value' => $paramValue
+        ];
     }
 }

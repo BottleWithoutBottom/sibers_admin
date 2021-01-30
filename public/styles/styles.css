@@ -40,6 +40,10 @@
     color: cornflowerblue;
 }
 
+.users-list .users-card .users-card__show {
+    color: grey;
+}
+
 .users-list .users-card .users-card-status__confirmed {
-    color: lawngreen;
+    color: green;
 }

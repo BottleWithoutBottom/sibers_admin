@@ -6,13 +6,13 @@ class View {
     const HEADER = 'header';
     const FOOTER = 'footer';
 
-    protected $route;
+    protected $name;
     protected $template;
 
-    public function __construct($route) {
-        $this->setRoute($route);
-        $route = $this->getRoute();
-        $this->setTemplate($route['controller']);
+    public function __construct($viewName) {
+        $this->setName($viewName);
+        $name = $this->getName();
+        $this->setTemplate($name);
     }
 
     /**
@@ -32,15 +32,15 @@ class View {
     /**
      * @return mixed
      */
-    public function getRoute() {
-        return $this->route;
+    public function getName() {
+        return $this->name;
     }
 
     /**
-     * @param mixed $route
+     * @param mixed $name
      */
-    public function setRoute($route): void {
-        $this->route = $route;
+    public function setName($name): void {
+        $this->name = $name;
     }
 
     public function render($title, $params = [], $page = '') {

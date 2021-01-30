@@ -15,7 +15,7 @@ class Request {
     }
 
     public function getQuery($query) {
-        return $_GET[$query] ?: null;
+        return htmlspecialchars(strip_tags($_GET[$query])) ?: null;
     }
 
     public function getQueryList() {
@@ -23,7 +23,7 @@ class Request {
     }
 
     public function getPost($query) {
-        return $_POST[$query] ?: null;
+        return htmlspecialchars(strip_tags($_POST[$query])) ?: null;
     }
 
     public function getPostList() {
@@ -34,5 +34,11 @@ class Request {
         return $_SERVER['REQUEST_URI'];
     }
 
+    public static function getSession($sessionName) {
+        return $_SESSION[$sessionName];
+    }
 
+    public static function getCookie($cookieName) {
+        return $_COOKIE[$cookieName];
+    }
 }

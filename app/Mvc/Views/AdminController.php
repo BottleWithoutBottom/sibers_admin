@@ -5,10 +5,6 @@
 ?>
 
 <div<?= $page ? ' class="' . $page . '-page' . '"' : '' ?>>
-    <div class="menu">
-        <a href="/">На главную</a>
-        <a href="/admin/">Админ</a>
-    </div>
     <h1><?= $title ?></h1>
 
     <div class="users-list">
@@ -24,8 +20,9 @@
                     <span><?= $user->lastname?></span>
                     <span><?= $user->birthday?></span>
                     <span class="users-card-status<?=$statusStyle ? '__confirmed' : ''?>"><?= $user->status?></span>
-                    <a class="users-card__edit">Редактировать</a>
-                    <a href="/admin/list/<?=$user->id?>/delete" class="users-card__delete">Удалить</a>
+                    <a href="/admin/list/<?=$user->id?>/" class="users-card__show">На детальную</a>
+                    <a href="/admin/list/<?=$user->id?>/edit/" class="users-card__edit">Редактировать</a>
+                    <a href="/admin/list/<?=$user->id?>/delete/" class="users-card__delete">Удалить</a>
                 </div>
             <? endforeach; ?>
         <? else: ?>

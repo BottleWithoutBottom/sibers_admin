@@ -8,5 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?=$content?>
+    <div class="menu">
+        <a href="/">На главную</a>
+        <a href="/admin/">Админ</a>
+    </div>
 
+    <?= $content ?>

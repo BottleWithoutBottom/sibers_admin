@@ -10,7 +10,7 @@ abstract class AbstractController {
 
     public function __construct($route) {
         $this->setRoute($route);
-        $this->view = new View($this->getRoute());
+        $this->attachView($route);
         $this->model = $this->attachModel($this->getRoute()['controller']);
     }
 
@@ -50,6 +50,13 @@ abstract class AbstractController {
         } else {
             throw new Exception('model was not found');
         }
+    }
+
+    protected function attachView($route) {
+        if (!$route['controller'] || !$route['action']) return false;
+        $viewName = $route['controller'] . ucfirst($route['action']);
+        $this->view = new View($viewName);
+        return true;
     }
 
 

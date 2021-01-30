@@ -9,8 +9,8 @@ abstract class AbstractQueryBuilder {
 
     abstract protected function catchErrors($stmt);
 
-    public function getResults() {
-        return $this->results;
+    public function getResults($index = null) {
+        return empty($index) ? $this->results[$index] : $this->results;
     }
 
     protected function getErrors() {

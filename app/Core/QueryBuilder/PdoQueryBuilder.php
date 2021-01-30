@@ -41,13 +41,12 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         if (empty($tableName)) static::emptyTableException();
 
         $sql = $operator . ' FROM ' . $tableName;
-
         if (count($filter) === static::OPERATOR_ARRAY_COUNT) {
             $key = $filter[0];
             $operand = $filter[1];
             $value = $filter[2];
             if (in_array($operand, static::AVAILABLE_OPERANDS)) {
-                $sql .= 'WHERE ' . $key . ' ' . $operand . ' ?';
+                $sql .= ' WHERE ' . $key . ' ' . $operand . ' ?';
                 $this->query($sql, [$value]);
             }
         } else {
