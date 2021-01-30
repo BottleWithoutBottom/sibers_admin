@@ -1,7 +1,8 @@
 <?php
 namespace App\Core;
 
-use mysql_xdevapi\Exception;
+use Exception;
+use App\Mvc\Views\View;
 
 class Router {
     private const CHILDREN = 'children';
@@ -47,7 +48,11 @@ class Router {
             if (method_exists($controller, $action)) {
                 $controller = new $controller($this->params);
                 $controller->$action();
+            } else {
+                View::Show404();
             }
+        } else {
+            View::Show404();
         }
 
         return false;

@@ -55,4 +55,10 @@ class View {
         require $header;
         require $footer;
     }
+
+    public static function Show404() {
+        http_response_code(400);
+
+        require VIEWS_DIR . 'Error404Controller.php';
+    }
 }

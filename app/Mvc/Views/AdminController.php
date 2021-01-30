@@ -18,7 +18,7 @@
                     $statusStyle = 'confirmed';
                 }
                 ?>
-                <div class="users-card">
+                <div class="users-card" data-user-id="<?= $user->id?>">
                     <span><?= $user->login?></span>
                     <span><?= $user->firstname?></span>
                     <span><?= $user->lastname?></span>

@@ -14,6 +14,12 @@ return [
                 'action' => 'index',
 
                 'children' => [
+                    '/admin/list/{id}/' => [
+                        'controller' => 'AdminController',
+                        'action' => 'show',
+                        'pattern' => '#\/admin\/list\/[0-9]+\/#'
+                    ],
+
                     '/admin/list/{id}/delete/' => [
                         'controller' => 'AdminController',
                         'action' => 'delete',
