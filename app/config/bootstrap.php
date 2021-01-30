@@ -7,6 +7,14 @@ return [
     '/admin/' => [
         'controller' => 'AdminController',
         'action' => 'index',
+
+        'children' => [
+            '/admin/list/' => [
+                'controller' => 'AdminController',
+                'action' => 'index',
+            ]
+
+        ]
     ]
 
 

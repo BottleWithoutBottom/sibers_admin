@@ -1,0 +1,45 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.users-list .users-card {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+
+    border-bottom: 1px solid silver;
+    border-top: 1px solid silver;
+}
+
+.users-list .users-card span {
+    display: inline-block;
+    max-width: 100px;
+    width: 100px;
+    font-size: 16px;
+    word-break: break-word;
+    text-align: center;
+
+}
+
+.users-list .users-card.title span{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.users-list .users-card .users-card__delete {
+    color: crimson;
+}
+
+.users-list .users-card .users-card__edit {
+    color: cornflowerblue;
+}
+
+.users-list .users-card .users-card-status__confirmed {
+    color: lawngreen;
+}

@@ -43,7 +43,7 @@ class View {
         $this->route = $route;
     }
 
-    public function render($title, $params = []) {
+    public function render($title, $params = [], $page = '') {
         $header = LAYOUTS . static::HEADER . '.php';
         $footer = LAYOUTS . static::FOOTER . '.php';
         if (!file_exists($header) || !file_exists($footer)) throw new \Exception('footer or header was not found!');
