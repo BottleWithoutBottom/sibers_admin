@@ -7,15 +7,31 @@ use App\Mvc\Models\Admin;
 use App\Mvc\Models\User;
 use App\Mvc\Views\View;
 use App\Core\Request;
+use App\Modules\Paginator;
+use App\Core\QueryBuilder\PdoQueryBuilder;
 
 class AdminController extends AbstractController {
 
     public function index($dynamicParams = []) {
         $model = $this->getModel();
 
-        $users = $model->getUsers();
+        $usersCount = $model->getUsersCount();
+        $request = Request::getInstance();
+        $uri = $request->getUri();
+        $currentPage = $request->getQuery(Paginator::QUERY);
+        $paginator = new Paginator($usersCount, 1, $currentPage, $uri);
+        $paginator->generate();
+        $firstRow = $paginator->getFirstRow();
+        $lastRow = $paginator->getLastRow();
+        $limit = [
+            PdoQueryBuilder::FIRST_ROW => $firstRow,
+        ];
+
+        if ($lastRow >= $usersCount) $limit[PdoQueryBuilder::LAST_ROW] = $usersCount;
+        $users = $model->getUsers($limit);
         $this->view->render('Users list', [
             'users' => $users,
+            'paginator' => $paginator->getHtml()
         ],
         'users-list');
     }

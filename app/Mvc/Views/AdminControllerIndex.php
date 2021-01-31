@@ -2,6 +2,7 @@
 /** @var string $title */
 /** @var array $users */
 /** @var string $page */
+/** @var string $paginator */
 ?>
 
 <div<?= $page ? ' class="' . $page . '-page' . '"' : '' ?>>
@@ -30,5 +31,7 @@
             <a href="<?= SITE_DIR ?>">Вернуться на главную</a>
         <? endif; ?>
         <a class="users-list-add" href="/admin/list/add/">добавить нового пользователя</a>
+
+        <?= $paginator ?>
     </div>
 </div>

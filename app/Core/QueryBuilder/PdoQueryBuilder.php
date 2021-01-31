@@ -9,6 +9,8 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
     private CONST OPERATOR_ARRAY_COUNT = 3;
     private CONST AVAILABLE_OPERANDS = ['<', '>', '=', '!=', '<>', '<=', '>='];
     private CONST INIT_BIND_VALUE = 1;
+    public const FIRST_ROW = 'firstRow';
+    public const LAST_ROW = 'lastRow';
 
     protected $stmt;
 
@@ -38,7 +40,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
      * позволяет фильтровать данные,
      * передавая в фильтр ['ключ', 'условие', 'значение']
      */
-    public function FROMoperator($tableName, $filter, $operator) {
+    public function FROMoperator($tableName, $filter, $operator, $limit = []) {
         if (empty($tableName)) static::emptyTableException();
 
         $sql = $operator . ' FROM ' . $tableName;
@@ -48,9 +50,16 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
             $value = $filter[2];
             if (in_array($operand, static::AVAILABLE_OPERANDS)) {
                 $sql .= ' WHERE ' . $key . ' ' . $operand . ' ?';
+
+                if (!empty($limit)) {
+                    $sql = $this->setLimit($sql, $limit);
+                }
                 $this->query($sql, [$value]);
             }
         } else {
+            if (!empty($limit)) {
+                $sql = $this->setLimit($sql, $limit);
+            }
             $this->query($sql);
         }
 
@@ -61,9 +70,10 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
     /** @param string $tableName
      * @param array $filter
      * @param array $selectedFields
+     * @param array $limit ['firstRow' => number, 'lastRow' => number]
      * @return AbstractQueryBuilder
      */
-    public function select($tableName, $filter = [], $selectedFields = []) {
+    public function select($tableName, $filter = [], $selectedFields = [], $limit = []) {
         if (empty($tableName)) static::emptyTableException();
 
         $selectedFieldsString = '*';
@@ -73,7 +83,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
 
         $operator = 'SELECT ' . $selectedFieldsString;
 
-        return $this->FROMoperator($tableName, $filter, $operator);
+        return $this->FROMoperator($tableName, $filter, $operator, $limit);
     }
 
     public function delete($tableName, $filter) {
@@ -132,12 +142,31 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         }
     }
 
+    public function count() {
+        return count($this->getResults());
+    }
+
     protected function catchErrors() {
         $errors = $this->stmt->errorInfo();
         if ($errors[0] !== PDO::ERR_NONE) {
             $this->setError($errors[2]);
             var_dump($this->getErrors());die();
         }
+    }
+
+    protected function setLimit($sql, $limit = []) {
+        if (empty($sql)) die('Пустой запрос');
+        if (count($limit)) {
+            if (count($limit) == 1) {
+                $sql .= ' LIMIT ' . $limit[static::FIRST_ROW];
+            } elseif(count($limit) == 2) {
+
+                if ($limit[static::FIRST_ROW] == $limit[static::LAST_ROW]) $limit[static::FIRST_ROW] -= 1;
+
+                $sql .= ' LIMIT ' . $limit[static::FIRST_ROW] . ',' . $limit[static::LAST_ROW];
+            }
+        }
+        return $sql;
     }
 
     private static function emptyTableException() {

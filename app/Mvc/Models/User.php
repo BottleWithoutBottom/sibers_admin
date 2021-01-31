@@ -16,10 +16,11 @@ class User extends AbstractModel {
     public CONST CONFIRMED_STATUS = 2;
     public CONST GOD_STATUS = 3;
 
-    public function getUser($key, $operand, $value, $selectFields = []) {
+    /** @param array limit ['firstRow'=>number, 'lastRow'=>number] */
+    public function getUser($key, $operand, $value, $selectFields = [], $limit = []) {
         if (empty($key) && empty($operand) && empty($value)) return false;
 
-        return $this->queryBuilder->select(static::TABLE_NAME, [$key, $operand, $value], $selectFields)->getResults(0);
+        return $this->queryBuilder->select(static::TABLE_NAME, [$key, $operand, $value], $selectFields, $limit)->getResults(0);
     }
 
     public function setUser($fields) {

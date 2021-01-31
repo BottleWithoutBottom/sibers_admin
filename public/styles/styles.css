@@ -1,5 +1,6 @@
 * {
     font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
 }
 
 .menu {
@@ -63,6 +64,25 @@
 .users-list-add {
     color: blue;
     font-size: 20px;
+}
+
+.paginator {
+    height: auto;
+}
+
+.paginator-link {
+    padding: 20px;
+    text-decoration: none;
+    border: 2px solid silver;
+    border-radius: 5px;
+    background: #fff;
+    color: #000;
+}
+
+.paginator-link.active {
+    background: cornflowerblue;
+    color: #fff;
+    border: none;
 }
 
 .preloader {
