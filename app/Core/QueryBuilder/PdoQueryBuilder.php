@@ -29,6 +29,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
             }
         }
         $this->stmt->execute();
+        $this->catchErrors();
         $this->results = $this->stmt->fetchAll(PDO::FETCH_OBJ);
         return $this;
     }
@@ -128,8 +129,8 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         }
     }
 
-    protected function catchErrors($stmt) {
-        $errors = $stmt->errorInfo();
+    protected function catchErrors() {
+        $errors = $this->stmt->errorInfo();
 
         if ($errors[0] !== PDO::ERR_NONE) {
             $this->setError($errors[2]);
