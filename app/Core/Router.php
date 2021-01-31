@@ -76,9 +76,13 @@ class Router {
     protected function mount() {
         foreach($this->routes as $route => $params) {
             $route_preg = $this->pregRoute($route);
-            $params['dynamicParams'] = $this->getDynamicParams($route);
+
             $request = Request::getInstance();
             $uri = $request->getUri();
+
+            if ($params['pattern'] && preg_match($params['pattern'], $uri))
+                $params['dynamicParams'] = $this->getDynamicParams($route);
+
             if ($params['pattern'] && preg_match($params['pattern'], $uri) || preg_match($route_preg, $uri)) {
                 $this->setParams($params);
                 return true;
@@ -104,7 +108,7 @@ class Router {
 
     /** функция для извлечения динамических параметров из uri по маске роута */
     private function getDynamicParams($route) {
-        if (!strpos($route, '{') || strlen($route <= 1)) return false;
+        if (!strpos($route, '{')) return false;
         $dynamicParams = [];
         $request = Request::getInstance();
         $uri = $request->getUri();

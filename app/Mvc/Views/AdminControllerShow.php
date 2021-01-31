@@ -15,12 +15,12 @@
 
         <label>
             <p>Имя</p>
-            <input type="text" value="<?= $user->firstName ?>">
+            <input type="text" value="<?= $user->firstname ?>">
         </label>
 
         <label>
             <p>Фамилия</p>
-            <input type="text" value="<?= $user->lastName ?>">
+            <input type="text" value="<?= $user->firstname ?>">
         </label>
 
         <input type="hidden" value="<? $user->id ?>">

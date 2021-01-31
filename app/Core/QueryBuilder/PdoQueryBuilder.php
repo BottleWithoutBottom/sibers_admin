@@ -133,7 +133,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
 
         if ($errors[0] !== PDO::ERR_NONE) {
             $this->setError($errors[2]);
-            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($this->getErrors());echo("</pre>");die();
+            die($this->getErrors());
         }
     }
 

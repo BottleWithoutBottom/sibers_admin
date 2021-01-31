@@ -7,7 +7,6 @@ use App\Core\Manager\UserManager;
 session_start();
 $application = Application::getInstance();
 $userManager = new UserManager();
-
 $router = $application->getRouter();
 $router->loadConfigfile();
 if ($router->generateRoutes()) {

@@ -18,17 +18,20 @@ class AdminController extends AbstractController {
     }
 
     public function show($dynamicParams = []) {
-        if (empty($dynamicParams['id'])) View::Show404();
-        $id = (int) $dynamicParams['id'];
-        $model = $this->getModel();
-        $user = $model->getUser($id);
-        $this->view->render(
-            'Пользователь: ' . $user->login,
-            [
-                'user' => $user,
-            ],
-            'users-detail'
-        );
+        if (empty($dynamicParams['id'])) {
+            View::Show404();
+        } else {
+            $id = (int) $dynamicParams['id'];
+            $model = $this->getModel();
+            $user = $model->getUser($id);
+            $this->view->render(
+                'Пользователь: ' . $user->login,
+                [
+                    'user' => $user,
+                ],
+                'users-detail'
+            );
+        }
     }
 
     public function edit() {

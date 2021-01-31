@@ -60,7 +60,7 @@ return [
             ],
             '/user/reg/' => [
                 'controller' => 'UserController',
-                'action' => 'reg',
+                'action' => 'reg        ',
             ],
         ]
     ]
