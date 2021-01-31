@@ -33,7 +33,5 @@ class AdminController extends AbstractController {
 
     public function edit() {
         $request = Request::getInstance();
-        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r(123);echo("</pre>");die();
-        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($request->getPostList());echo("</pre>");die();
     }
 }

@@ -1,3 +1,10 @@
+<?
+use App\Core\Manager\UserManager;
+
+$userManager = new UserManager();
+$authorizedInfo = $userManager->authorizeByToken();
+?>
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -12,9 +19,17 @@
         <a href="/">На главную</a>
         <a href="/admin/">Админ</a>
         <div class="menu-login">
-            <a class="menu-login__login js-login" href="/user/login/">Войти</a>
-            <a class="menu-login__logout js-logout" href="/user/logout/">Выйти</a>
-            <a class="menu-login__register js-register" href="/user/register/">Регистрация</a>
+            <a class="menu-login__login js-login"
+               href="/user/login/"
+                <?= ($authorizedInfo->id) ? 'style="display: none"' : '' ?>
+            >Войти</a>
+            <a class="menu-login__logout js-logout"
+               href="/user/logout/"
+                <?= (!$authorizedInfo->id) ? 'style="display: none"' : '' ?>>Выйти</a>
+            <a class="menu-login__register js-register"
+               href="/user/register/"
+                <?= ($authorizedInfo->id) ? 'style="display: none"' : '' ?>
+            >Регистрация</a>
         </div>
 
     </div>

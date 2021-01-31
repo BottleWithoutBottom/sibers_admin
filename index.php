@@ -1,11 +1,12 @@
 <?php require __DIR__ . '/vendor/autoload.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/app/config/constants.php';
 require SITE_DIR . '/app/config/database.php';
-/** @var array $DB_CONFIG */
+
 use App\Core\Application;
+use App\Core\Manager\UserManager;
+session_start();
 $application = Application::getInstance();
-$DATABASE = $application->getDBDriver($DB_CONFIG);
-global $DATABASE;
+$userManager = new UserManager();
 
 $router = $application->getRouter();
 $router->loadConfigfile();
