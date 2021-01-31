@@ -7,10 +7,6 @@ use App\Mvc\Models\User;
 use App\Mvc\Models\UserToken;
 
 class UserManager {
-    protected CONST AUTHORIZED_STATUS = 1;
-    protected CONST CONFIRMED_STATUS = 2;
-    protected CONST GOD_STATUS = 3;
-
     protected CONST TOKEN_LENGTH = 128;
 
     protected CONST SESSID = 'sessid';
@@ -49,7 +45,7 @@ class UserManager {
 
         $preparedParams = Helper::stripTagsArray($params);
         $hashedPassword = $this->hashPassword($preparedParams[User::PASSWORD]);
-        $preparedParams[User::STATUS] = static::AUTHORIZED_STATUS;
+        $preparedParams[User::STATUS] = User::AUTHORIZED_STATUS;
         $preparedParams[User::PASSWORD] = $hashedPassword;
         if ($this->model->setUser($preparedParams)) {
             $user = $this->model->getUser(User::LOGIN, '=', $preparedParams[User::LOGIN]);

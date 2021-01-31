@@ -12,6 +12,10 @@ class User extends AbstractModel {
     public CONST STATUS = 'status';
     public CONST TABLE_NAME = 'users';
 
+    public CONST AUTHORIZED_STATUS = 1;
+    public CONST CONFIRMED_STATUS = 2;
+    public CONST GOD_STATUS = 3;
+
     public function getUser($key, $operand, $value, $selectFields = []) {
         if (empty($key) && empty($operand) && empty($value)) return false;
 
@@ -21,6 +25,12 @@ class User extends AbstractModel {
     public function setUser($fields) {
         if (empty($fields[static::LOGIN]) || empty($fields[static::PASSWORD])) return false;
         return $this->queryBuilder->insert(static::TABLE_NAME, $fields);
+    }
+
+    public function deleteUser($userId) {
+        if (empty($userId)) return false;
+
+        return $this->queryBuilder->delete(static::TABLE_NAME, [static::ID, '=', $userId]);
     }
 
 }

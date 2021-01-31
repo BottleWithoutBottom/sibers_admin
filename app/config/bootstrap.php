@@ -17,19 +17,19 @@ return [
                     '/admin/list/{id}/' => [
                         'controller' => 'AdminController',
                         'action' => 'show',
-                        'pattern' => '#\/admin\/list\/[0-9]+\/#'
+                        'pattern' => '#^\/admin\/list\/[0-9]+\/$#'
                     ],
 
                     '/admin/list/{id}/delete/' => [
                         'controller' => 'AdminController',
                         'action' => 'delete',
-                        'pattern' => '#\/admin\/list\/[0-9]+\/delete\/#'
+                        'pattern' => '#^\/admin\/list\/[0-9]+\/delete\/$#'
                     ],
 
                     '/admin/list/{id}/edit/' => [
                         'controller' => 'AdminController',
                         'action' => 'edit',
-                        'pattern' => '#\/admin\/list\/[0-9]+\/edit\/#'
+                        'pattern' => '#^\/admin\/list\/[0-9]+\/edit\/$#'
                     ]
                 ]
             ]
@@ -60,7 +60,7 @@ return [
             ],
             '/user/reg/' => [
                 'controller' => 'UserController',
-                'action' => 'reg        ',
+                'action' => 'reg',
             ],
         ]
     ]
