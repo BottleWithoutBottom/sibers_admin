@@ -79,7 +79,6 @@ class AdminController extends AbstractController {
     }
 
     public function delete($dynamicParams = []) {
-        $request = Request::getInstance();
         $userId = $dynamicParams['id'];
 
         $userManager = new UserManager();
@@ -87,17 +86,39 @@ class AdminController extends AbstractController {
 
         if ($userId) {
             $userModel = new User();
-            if ($userModel->deleteUser($userId)) {
-                header('Location: /');
+            if ($userData->status != User::GOD_STATUS) {
+                if ($userModel->deleteUser($userId)) {
+                    header('Location: /');
+                } else {
+                    die('Не удалось удалить пользователя');
+                }
             } else {
-                die('Не удалось удалить пользователя');
+                die('У вас недостаточно прав для выполнения данного действия');
             }
-
-        } elseif ($userData[User::STATUS] !== User::GOD_STATUS){
-            die('У вас недостаточно прав для выполнения данного действия');
-        } else {
-            die('Не могу удалить пользователя без указания его ID');
         }
+    }
 
+    public function add() {
+        $userManager = new UserManager();
+        $userData = $userManager->authorizeByToken();
+        if ($userData->status != User::GOD_STATUS) die('Вы не имеете права создавать новых пользователей');
+
+        $this->view->render('Добавление нового пользователя', [],'user-detail-add');
+    }
+
+    public function create() {
+        $request = Request::getInstance();
+
+        $params = $request->getPostList();
+        $preparedParams = Helper::stripTagsArray($params);
+
+        $userManager = new UserManager();
+        $preparedParams[User::PASSWORD] = $userManager->hashPassword($preparedParams[User::PASSWORD]);
+        $userModel = new User();
+        if ($userModel->setUser($preparedParams)) {
+            header('Location: /');
+        } else {
+            die('не получилось создать нового пользователя');
+        }
     }
 }

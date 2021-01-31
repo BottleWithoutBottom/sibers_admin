@@ -10,7 +10,7 @@
     <div class="users-list">
         <? if (!empty($users)): ?>
             <? foreach($users as $user):
-                if ($user->status > 0) {
+                if ($user->status > 1) {
                     $statusStyle = 'confirmed';
                 }
                 ?>
@@ -29,5 +29,6 @@
             <i>Список пользователей пуст</i>
             <a href="<?= SITE_DIR ?>">Вернуться на главную</a>
         <? endif; ?>
+        <a class="users-list-add" href="/admin/list/add/">добавить нового пользователя</a>
     </div>
 </div>

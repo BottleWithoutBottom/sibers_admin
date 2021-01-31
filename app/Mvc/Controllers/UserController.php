@@ -19,6 +19,8 @@ class UserController extends AbstractController {
         $userManager = new UserManager();
         if ($userManager->login($params)) {
             header('Location:/');
+        } else {
+            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($params);echo("</pre>");die();
         }
     }
 
@@ -32,6 +34,10 @@ class UserController extends AbstractController {
 
         $userManager = new UserManager();
 
-        return $userManager->register($preparedParams);
+        if($userManager->register($preparedParams)) {
+            header('Location: /');
+        } else {
+            var_dump('Не удалось зарегистрироваться');
+        }
     }
 }

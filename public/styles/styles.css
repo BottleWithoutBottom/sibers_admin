@@ -60,6 +60,11 @@
     color: green;
 }
 
+.users-list-add {
+    color: blue;
+    font-size: 20px;
+}
+
 .preloader {
     border-radius: 50%;
 }
