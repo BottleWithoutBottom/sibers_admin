@@ -9,6 +9,7 @@ class Router {
     private const OPEN_TAG = '{';
     private const CLOSE_TAG = '}';
     private const VALUE_CLOSE_TAG = '/';
+    private const MAX_URI_LENGTH = 400;
 
     protected static $instance;
     protected $routes;
@@ -103,6 +104,7 @@ class Router {
 
     /** функция для извлечения динамических параметров из uri по маске роута */
     private function getDynamicParams($route) {
+        if (!strpos($route, '{') || strlen($route <= 1)) return false;
         $dynamicParams = [];
         $request = Request::getInstance();
         $uri = $request->getUri();
@@ -111,6 +113,8 @@ class Router {
                 $dynamicParam = $this->parseParam($route, $uri, $i);
                 $dynamicParams[$dynamicParam['key']] = $dynamicParam['value'];
             }
+
+            if ($i > static::MAX_URI_LENGTH) return false;
         }
         return $dynamicParams;
     }
@@ -146,6 +150,8 @@ class Router {
             if ($uri[$cutStartPos] == static::VALUE_CLOSE_TAG) {
                 $closeTagValueFound = true;
             }
+
+            if ($valueLength > static::MAX_URI_LENGTH) return false;
         }
 
         // Если сразу же нашелся закрывающийся слеш, значит значение длинной в 1 символ

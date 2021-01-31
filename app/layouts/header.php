@@ -11,6 +11,12 @@
     <div class="menu">
         <a href="/">На главную</a>
         <a href="/admin/">Админ</a>
+        <div class="menu-login">
+            <a class="menu-login__login js-login" href="/user/login/">Войти</a>
+            <a class="menu-login__logout js-logout" href="/user/logout/">Выйти</a>
+            <a class="menu-login__register js-register" href="/user/register/">Регистрация</a>
+        </div>
+
     </div>
 
     <?= $content ?>

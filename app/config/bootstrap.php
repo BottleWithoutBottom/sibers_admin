@@ -35,6 +35,34 @@ return [
             ]
 
         ]
+    ],
+
+    '/user/' => [
+        'controller' => 'UserController',
+        'action' => 'index',
+
+        'children' => [
+            '/user/login/' => [
+                'controller' => 'UserController',
+                'action' => 'login',
+            ],
+            '/user/authorize/' => [
+                'controller' => 'UserController',
+                'action' => 'authorize',
+            ],
+            '/user/logout/' => [
+                'controller' => 'UserController',
+                'action' => 'logout',
+            ],
+            '/user/register/' => [
+                'controller' => 'UserController',
+                'action' => 'register',
+            ],
+            '/user/reg/' => [
+                'controller' => 'UserController',
+                'action' => 'reg',
+            ],
+        ]
     ]
 
 

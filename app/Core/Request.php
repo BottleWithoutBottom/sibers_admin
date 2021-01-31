@@ -68,4 +68,11 @@ class Request {
         setCookie($cookieName, '', time() - 1, '/');
         return true;
     }
+
+    public function getSessionOrCookie($name) {
+        $session = $this->getSession($name);
+        $cookie = $this->getCookie($name);
+
+        return !empty($session) ? $session : (!empty($cookie) ? $cookie : false);
+    }
 }

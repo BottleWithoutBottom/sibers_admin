@@ -96,11 +96,10 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         }
         $mask = rtrim($mask, ',');
 
-        $sqlKeys = '(`' . implode('` ', array_keys($fields)) . '`)';
+        $sqlKeys = '(`' . implode('`, `', array_keys($fields)) . '`)';
         $sqlValues = '(' . $mask . ')';
 
         $sql = 'INSERT INTO ' . $tableName . ' ' . $sqlKeys . ' VALUES ' . $sqlValues;
-
         return $this->query($sql, $fields);
     }
 
@@ -134,6 +133,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
 
         if ($errors[0] !== PDO::ERR_NONE) {
             $this->setError($errors[2]);
+            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($this->getErrors());echo("</pre>");die();
         }
     }
 

@@ -2,6 +2,18 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.menu {
+    display: flex;
+}
+
+.menu a {
+    margin-right: 5px;
+}
+
+.menu-login {
+    margin-left: auto;
+}
+
 .users-list {
     display: flex;
     flex-direction: column;
@@ -46,4 +58,29 @@
 
 .users-list .users-card .users-card-status__confirmed {
     color: green;
+}
+
+.preloader {
+    border-radius: 50%;
+}
+
+.preloader.active {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    animation: preload 5s ease-in 0s infinite alternate-reverse ;
+}
+
+
+@keyframes preload {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) rotate(270deg) scale(1.2);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+    }
 }

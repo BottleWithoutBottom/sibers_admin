@@ -22,12 +22,7 @@ class UserManager {
 
 
     public function login($params) {
-        if (
-            empty($params[User::LOGIN])
-            ||  empty($params[User::PASSWORD])
-        ) {
-            return false;
-        }
+        if (empty($params[User::LOGIN]) ||  empty($params[User::PASSWORD])) return false;
 
         $preparedParams = $this->prepareParams($params);
 
@@ -47,6 +42,21 @@ class UserManager {
         }
 
         return false;
+    }
+
+    public function register($params) {
+        if (empty($params[User::LOGIN] || empty($params[User::PASSWORD]))) return false;
+
+        $preparedParams = Helper::stripTagsArray($params);
+        $hashedPassword = $this->hashPassword($preparedParams[User::PASSWORD]);
+        $preparedParams[User::STATUS] = static::AUTHORIZED_STATUS;
+        $preparedParams[User::PASSWORD] = $hashedPassword;
+        if ($this->model->setUser($preparedParams)) {
+            return true;
+        } else {
+            throw new \Exception('an error occured during register, repeat again.');
+        }
+
     }
 
     private function hashPassword($password) {
@@ -82,5 +92,23 @@ class UserManager {
 
         $request->setSession(static::SESSID, $token);
         $request->setCookie(static::SESSID, $token, 3600 * 24 * 7);
+        return true;
+    }
+
+    private function authorizeByToken() {
+        $request = Request::getInstance();
+
+        $token = $request->getSessionOrCookie(UserToken::TOKEN);
+
+        if ($token) {
+            $userTokenModel = new UserToken();
+            $user_id = $userTokenModel->selectUserIdByToken($token);
+
+            if ($user_id) {
+                $user = $this->model->getUser(User::ID, '=', $user_id, [User::LOGIN, User::STATUS, User::ID]);
+
+                if ($user) return $user;
+            }
+        }
     }
 }

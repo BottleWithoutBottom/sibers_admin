@@ -7,7 +7,7 @@ abstract class AbstractQueryBuilder {
     protected $errors = [];
     protected $results;
 
-    abstract protected function catchErrors($stmt);
+    abstract protected function catchErrors();
 
     public function getResults($index = null) {
         return empty($index) ? $this->results[$index] : $this->results;
