@@ -2,6 +2,7 @@
 
 nameSpace App\Mvc\Controllers;
 use App\Core\Manager\UserManager;
+use App\Core\Helper;
 use App\Mvc\Models\Admin;
 use App\Mvc\Models\User;
 use App\Mvc\Views\View;
@@ -20,10 +21,10 @@ class AdminController extends AbstractController {
     }
 
     public function show($dynamicParams = []) {
-        if (empty($dynamicParams['id'])) {
+        if (empty($dynamicParams[User::ID])) {
             View::Show404();
         } else {
-            $id = (int) $dynamicParams['id'];
+            $id = (int) $dynamicParams[User::ID];
             $model = $this->getModel();
             $user = $model->getUser($id);
             $this->view->render(
@@ -36,8 +37,45 @@ class AdminController extends AbstractController {
         }
     }
 
-    public function edit() {
+    public function edit($dynamicParams = []) {
+        if (empty($dynamicParams[User::ID])) {
+            View::Show404();
+        } else {
+
+            $request = Request::getInstance();
+            $postList = $request->getPostList();
+
+            $id = (int) $dynamicParams[User::ID];
+            $model = $this->getModel();
+            $user = $model->getUser($id);
+
+            $this->view->render(
+                'Редактирование пользователя ' . $user->login,
+                [
+                    'user' => $user,
+                ],
+                'users-detail-edit'
+            );
+        }
+    }
+
+    public function update() {
         $request = Request::getInstance();
+        $fields = $request->getPostList();
+
+        foreach ($fields as $field) {
+            if (empty($field)) die('Невозможно установить значение как null');
+        }
+
+        $preparedFields = Helper::stripTagsArray($fields);
+
+        $userModel = new User();
+
+        if ($userModel->updateUser($preparedFields)) {
+            header('Location: /');
+        } else {
+            die('Не удалось обновить пользователя');
+        }
     }
 
     public function delete($dynamicParams = []) {

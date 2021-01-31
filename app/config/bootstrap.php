@@ -30,6 +30,12 @@ return [
                         'controller' => 'AdminController',
                         'action' => 'edit',
                         'pattern' => '#^\/admin\/list\/[0-9]+\/edit\/$#'
+                    ],
+
+                    '/admin/list/{id}/update/' => [
+                        'controller' => 'AdminController',
+                        'action' => 'update',
+                        'pattern' => '#^\/admin\/list\/[0-9]+\/update\/$#'
                     ]
                 ]
             ]

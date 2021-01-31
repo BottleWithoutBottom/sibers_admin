@@ -112,7 +112,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
 
         $mask = '';
         foreach ($fields as $key => $fieldValue) {
-            $mask .= ($key . '?,');
+            $mask .= ($key . ' = ?,' );
         }
         $mask = rtrim($mask, ',');
 
@@ -122,18 +122,21 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
             $value = $filter[2];
 
             if (in_array($operand, static::AVAILABLE_OPERANDS)) {
-                $sql = 'UPDATE ' . $tableName . ' SET ' . 'WHERE ' . $key . ' ' . $operand . ' ?';
-                $this->query($sql, [$value]);
+                $sql = 'UPDATE ' . $tableName . ' SET ';
+
+                if (!empty($mask)) $sql .= $mask;
+
+                $sql .= ' WHERE ' . $key . ' ' . $operand . $value;
+                return $this->query($sql, $fields);
             }
         }
     }
 
     protected function catchErrors() {
         $errors = $this->stmt->errorInfo();
-
         if ($errors[0] !== PDO::ERR_NONE) {
             $this->setError($errors[2]);
-            die($this->getErrors());
+            var_dump($this->getErrors());die();
         }
     }
 

@@ -33,4 +33,11 @@ class User extends AbstractModel {
         return $this->queryBuilder->delete(static::TABLE_NAME, [static::ID, '=', $userId]);
     }
 
+    public function updateUser($fields) {
+        if (empty($fields[static::ID])) die('Не могу обновить данные пользователя, не передав его id');
+
+
+        return $this->queryBuilder->update(static::TABLE_NAME, $fields, [static::ID, '=', $fields[static::ID]]);
+    }
+
 }
