@@ -3,7 +3,6 @@
 nameSpace App\Mvc\Controllers;
 use App\Core\Manager\UserManager;
 use App\Core\Helper;
-use App\Mvc\Models\Admin;
 use App\Mvc\Models\User;
 use App\Mvc\Views\View;
 use App\Core\Request;
@@ -12,7 +11,10 @@ use App\Core\QueryBuilder\PdoQueryBuilder;
 
 class AdminController extends AbstractController {
 
-    public function index($dynamicParams = []) {
+    public function index() {
+        $userManager = new UserManager();
+        if (!$userManager->authorizeByToken()) header('Location: /');
+
         $model = $this->getModel();
 
         $usersCount = $model->getUsersCount();
@@ -37,6 +39,8 @@ class AdminController extends AbstractController {
     }
 
     public function show($dynamicParams = []) {
+        $userManager = new UserManager();
+        if (!$userManager->authorizeByToken()) header('Location: /');
         if (empty($dynamicParams[User::ID])) {
             View::Show404();
         } else {
@@ -54,13 +58,12 @@ class AdminController extends AbstractController {
     }
 
     public function edit($dynamicParams = []) {
+        $userManager = new UserManager();
+        if (!$userManager->authorizeByToken()) header('Location: /');
+
         if (empty($dynamicParams[User::ID])) {
             View::Show404();
         } else {
-
-            $request = Request::getInstance();
-            $postList = $request->getPostList();
-
             $id = (int) $dynamicParams[User::ID];
             $model = $this->getModel();
             $user = $model->getUser($id);
@@ -76,6 +79,9 @@ class AdminController extends AbstractController {
     }
 
     public function update() {
+        $userManager = new UserManager();
+        if (!$userManager->authorizeByToken()) header('Location: /');
+
         $request = Request::getInstance();
         $fields = $request->getPostList();
 
@@ -95,11 +101,11 @@ class AdminController extends AbstractController {
     }
 
     public function delete($dynamicParams = []) {
-        $userId = $dynamicParams['id'];
-
         $userManager = new UserManager();
         $userData = $userManager->authorizeByToken();
+        if (!$userData) header('Location: /');
 
+        $userId = $dynamicParams['id'];
         if ($userId) {
             $userModel = new User();
             if ($userData->status != User::GOD_STATUS) {
@@ -117,12 +123,17 @@ class AdminController extends AbstractController {
     public function add() {
         $userManager = new UserManager();
         $userData = $userManager->authorizeByToken();
+        if (!$userData) header('Location: /');
+
         if ($userData->status != User::GOD_STATUS) die('Permission denied');
 
         $this->view->render('Adding an user', [],'user-detail-add');
     }
 
     public function create() {
+        $userManager = new UserManager();
+        if (!$userManager->authorizeByToken()) header('Location: /');
+
         $request = Request::getInstance();
 
         $params = $request->getPostList();
