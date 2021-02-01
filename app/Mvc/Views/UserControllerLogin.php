@@ -9,17 +9,17 @@ $request = Request::getInstance();
     <h1><?= $title ?></h1>
     <form action="/user/authorize/" method="post">
         <label>
-            <p>Логин</p>
+            <p>Login</p>
             <input type="text" value="<?= $request->getPost(User::LOGIN) ?>" name="<?= User::LOGIN ?>">
         </label>
 
         <label>
-            <p>Пароль</p>
+            <p>Password</p>
             <input type="password" name="<?= User::PASSWORD ?>">
         </label>
 
         <div>
-            <button type="submit">Войти</button>
+            <button type="submit">Login</button>
         </div>
     </form>
 </div>

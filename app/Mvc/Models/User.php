@@ -35,7 +35,7 @@ class User extends AbstractModel {
     }
 
     public function updateUser($fields) {
-        if (empty($fields[static::ID])) die('Не могу обновить данные пользователя, не передав его id');
+        if (empty($fields[static::ID])) var_dump('Cannot refresh user\'s data without passing an id');
 
 
         return $this->queryBuilder->update(static::TABLE_NAME, $fields, [static::ID, '=', $fields[static::ID]]);

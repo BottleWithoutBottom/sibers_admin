@@ -15,21 +15,22 @@ $authorizedInfo = $userManager->authorizeByToken();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<div class="container">
     <div class="menu">
-        <a href="/">На главную</a>
-        <a href="/admin/">Админ</a>
+        <a href="/">Main page</a>
+        <a href="/admin/" <?= (!$authorizedInfo->id) ? 'style="display: none"' : '' ?>>Admin</a>
         <div class="menu-login">
             <a class="menu-login__login js-login"
                href="/user/login/"
                 <?= ($authorizedInfo->id) ? 'style="display: none"' : '' ?>
-            >Войти</a>
+            >Sign in</a>
             <a class="menu-login__logout js-logout"
                href="/user/logout/"
-                <?= (!$authorizedInfo->id) ? 'style="display: none"' : '' ?>>Выйти</a>
+                <?= (!$authorizedInfo->id) ? 'style="display: none"' : '' ?>>Log out</a>
             <a class="menu-login__register js-register"
                href="/user/register/"
                 <?= ($authorizedInfo->id) ? 'style="display: none"' : '' ?>
-            >Регистрация</a>
+            >Sign up</a>
         </div>
 
     </div>

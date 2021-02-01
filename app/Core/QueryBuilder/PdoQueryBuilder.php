@@ -36,9 +36,9 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         return $this;
     }
 
-    /** Оболочка над методами delete/select,
-     * позволяет фильтровать данные,
-     * передавая в фильтр ['ключ', 'условие', 'значение']
+    /** Wrapper for methods delete/select,
+     * make it possible to filter data,
+     * by passing the filter in format ['key', 'condition', 'value']
      */
     public function FROMoperator($tableName, $filter, $operator, $limit = []) {
         if (empty($tableName)) static::emptyTableException();

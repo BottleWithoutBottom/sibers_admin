@@ -10,23 +10,23 @@ use App\Mvc\Models\User;
 
     <form action="/admin/list/<?= $user->id ?>/update/" method="post">
         <label>
-            <p>Логин</p>
+            <p>Login</p>
             <input type="text" value="<?= $user->login ?>" name="<?= User::LOGIN ?>">
         </label>
 
         <label>
-            <p>Имя</p>
+            <p>Firstname</p>
             <input type="text" value="<?= $user->firstname ?>" name="<?= User::FIRSTNAME ?>">
         </label>
 
         <label>
-            <p>Фамилия</p>
+            <p>Lastname</p>
             <input type="text" value="<?= $user->firstname ?>" name="<?= User::LASTNAME ?>">
         </label>
 
         <input type="hidden" value="<?= $user->id ?>" name="<?= User::ID ?>">
         <div>
-            <button type="submit">Подтвердить</button>
+            <button type="submit">Confirm</button>
         </div>
     </form>
 </div>

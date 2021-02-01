@@ -125,7 +125,7 @@ class Paginator {
 
     public static function createHref($uri, $page) {
         //вырезаем предыдущий get-запрос, если таковой имеется
-        $uri = preg_replace('#^?' . static::QUERY . '=' . '[0-9]*' . '$#', '', $uri);
+        $uri = preg_replace('#^\?' . static::QUERY . '=' . '[0-9]*' . '$#', '', $uri);
         return $uri . '?' . static::QUERY . '=' . $page;
     }
 

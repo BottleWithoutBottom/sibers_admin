@@ -18,7 +18,7 @@ class AdminController extends AbstractController {
         $usersCount = $model->getUsersCount();
         $request = Request::getInstance();
         $uri = $request->getUri();
-        $currentPage = $request->getQuery(Paginator::QUERY);
+        $currentPage = $request->getQuery(Paginator::QUERY) ?: 1;
         $paginator = new Paginator($usersCount, 1, $currentPage, $uri);
         $paginator->generate();
         $firstRow = $paginator->getFirstRow();
@@ -44,7 +44,7 @@ class AdminController extends AbstractController {
             $model = $this->getModel();
             $user = $model->getUser($id);
             $this->view->render(
-                'Пользователь: ' . $user->login,
+                'User: ' . $user->login,
                 [
                     'user' => $user,
                 ],
@@ -66,7 +66,7 @@ class AdminController extends AbstractController {
             $user = $model->getUser($id);
 
             $this->view->render(
-                'Редактирование пользователя ' . $user->login,
+                'Editing the user ' . $user->login,
                 [
                     'user' => $user,
                 ],
@@ -80,7 +80,7 @@ class AdminController extends AbstractController {
         $fields = $request->getPostList();
 
         foreach ($fields as $field) {
-            if (empty($field)) die('Невозможно установить значение как null');
+            if (empty($field)) die('The field cannot be set as null');
         }
 
         $preparedFields = Helper::stripTagsArray($fields);
@@ -90,7 +90,7 @@ class AdminController extends AbstractController {
         if ($userModel->updateUser($preparedFields)) {
             header('Location: /');
         } else {
-            die('Не удалось обновить пользователя');
+            die('Cannot edit user\'s data');
         }
     }
 
@@ -106,10 +106,10 @@ class AdminController extends AbstractController {
                 if ($userModel->deleteUser($userId)) {
                     header('Location: /');
                 } else {
-                    die('Не удалось удалить пользователя');
+                    die('Cannot delete the user');
                 }
             } else {
-                die('У вас недостаточно прав для выполнения данного действия');
+                die('Permission denied');
             }
         }
     }
@@ -117,9 +117,9 @@ class AdminController extends AbstractController {
     public function add() {
         $userManager = new UserManager();
         $userData = $userManager->authorizeByToken();
-        if ($userData->status != User::GOD_STATUS) die('Вы не имеете права создавать новых пользователей');
+        if ($userData->status != User::GOD_STATUS) die('Permission denied');
 
-        $this->view->render('Добавление нового пользователя', [],'user-detail-add');
+        $this->view->render('Adding an user', [],'user-detail-add');
     }
 
     public function create() {
@@ -134,7 +134,7 @@ class AdminController extends AbstractController {
         if ($userModel->setUser($preparedParams)) {
             header('Location: /');
         } else {
-            die('не получилось создать нового пользователя');
+            die('Cannot create a user');
         }
     }
 }

@@ -3,6 +3,11 @@
     box-sizing: border-box;
 }
 
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
 .menu {
     display: flex;
 }
@@ -68,10 +73,14 @@
 
 .paginator {
     height: auto;
+    margin-top: 50px;
+
 }
 
 .paginator-link {
+    height: auto;
     padding: 20px;
+    margin-right: 5px;
     text-decoration: none;
     border: 2px solid silver;
     border-radius: 5px;

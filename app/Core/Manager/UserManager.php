@@ -10,12 +10,10 @@ class UserManager {
     protected CONST TOKEN_LENGTH = 128;
 
     protected CONST SESSID = 'sessid';
-    protected CONST HASH_PASSWORD = 'hashPassword';
 
     public function __construct() {
         $this->model = new User();
     }
-
 
     public function login($params) {
         if (empty($params[User::LOGIN]) ||  empty($params[User::PASSWORD])) return false;
@@ -34,7 +32,7 @@ class UserManager {
                 }
             }
         } else {
-            die('Пользователя с таким логином не существует');
+            var_dump('This user already exists');
         }
 
         return false;
@@ -100,6 +98,7 @@ class UserManager {
         return true;
     }
 
+    /** the methods checks if there is the token in any storage, and if it is so, returns user\'s data */
     public function authorizeByToken() {
         $request = Request::getInstance();
         $token = $request->getSessionOrCookie(static::SESSID);

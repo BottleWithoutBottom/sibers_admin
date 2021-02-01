@@ -9,23 +9,23 @@
 
     <form action="/admin/list/<?= $user->id ?>/edit/" method="post">
         <label>
-            <p>Логин</p>
+            <p>Login</p>
             <input type="text" value="<?= $user->login ?>">
         </label>
 
         <label>
-            <p>Имя</p>
+            <p>Firstname</p>
             <input type="text" value="<?= $user->firstname ?>">
         </label>
 
         <label>
-            <p>Фамилия</p>
+            <p>Lastname</p>
             <input type="text" value="<?= $user->firstname ?>">
         </label>
 
         <input type="hidden" value="<? $user->id ?>">
         <div>
-            <button type="submit">Подтвердить</button>
+            <button type="submit">Confrim</button>
         </div>
     </form>
 </div>

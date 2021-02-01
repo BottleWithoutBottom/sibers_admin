@@ -9,27 +9,27 @@ $request = Request::getInstance();
     <h1><?= $title ?></h1>
     <form action="/user/reg/" method="post">
         <label>
-            <p>Логин</p>
+            <p>Login</p>
             <input type="text" value="<?= $request->getPost(User::LOGIN) ?>" name="<?= User::LOGIN ?>">
         </label>
 
         <label>
-            <p>Пароль</p>
+            <p>Password</p>
             <input type="password" name="<?= User::PASSWORD ?>">
         </label>
 
         <label>
-            <p>Имя</p>
+            <p>Firstname</p>
             <input type="text" name="<?= User::FIRSTNAME ?>" value="<?= $request->getPost(User::FIRSTNAME) ?>">
         </label>
 
         <label>
-            <p>Фамилия</p>
+            <p>Lastname</p>
             <input type="text" name="<?= User::LASTNAME ?>" value="<?= $request->getPost(User::LASTNAME) ?>">
         </label>
 
         <div>
-            <button type="submit">Зарегистрироваться</button>
+            <button type="submit">Sign up</button>
         </div>
     </form>
 </div>

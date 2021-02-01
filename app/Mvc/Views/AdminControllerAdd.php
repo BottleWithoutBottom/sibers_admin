@@ -12,27 +12,27 @@ $request = Request::getInstance();
 
     <form action="/admin/list/create/" method="post">
         <label>
-            <p>Логин</p>
+            <p>Login</p>
             <input type="text" value="<?= $request->getPost(User::LOGIN) ?>" name="<?= User::LOGIN ?>">
         </label>
 
         <label>
-            <p>Пароль</p>
+            <p>Password</p>
             <input type="password" name="<?= User::PASSWORD ?>">
         </label>
 
         <label>
-            <p>Имя</p>
+            <p>Firstname</p>
             <input type="text" value="<?= $request->getPost(User::FIRSTNAME) ?>" name="<?= User::FIRSTNAME ?>">
         </label>
 
         <label>
-            <p>Фамилия</p>
+            <p>Lastname</p>
             <input type="text" value="<?= $request->getPost(User::LASTNAME) ?>" name="<?= User::LASTNAME ?>">
         </label>
 
         <div>
-            <button type="submit">Добавить</button>
+            <button type="submit">Add user</button>
         </div>
     </form>
 </div>

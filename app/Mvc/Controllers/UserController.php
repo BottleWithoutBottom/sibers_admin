@@ -9,7 +9,7 @@ use App\Core\Helper;
 class UserController extends AbstractController {
 
     public function login() {
-        $this->view->render('Войти', [], 'user-login');
+        $this->view->render('Sign in', [], 'user-login');
     }
 
     public function authorize() {
@@ -20,12 +20,12 @@ class UserController extends AbstractController {
         if ($userManager->login($params)) {
             header('Location:/');
         } else {
-            while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($params);echo("</pre>");die();
+            var_dump('Cannot sign in. Check your data one more time');
         }
     }
 
     public function register() {
-        $this->view->render('Регистрация', [], 'user-register');
+        $this->view->render('Sign up', [], 'user-register');
     }
 
     public function reg() {
@@ -37,7 +37,7 @@ class UserController extends AbstractController {
         if($userManager->register($preparedParams)) {
             header('Location: /');
         } else {
-            var_dump('Не удалось зарегистрироваться');
+            var_dump('Cannot sign up. Check your data one more time');
         }
     }
 }

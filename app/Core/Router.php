@@ -72,7 +72,7 @@ class Router {
 
         return true;
     }
-    /** функция ищет роут, совпадающий с введенным uri */
+    /** The method is looking for route that coinsides with URI */
     protected function mount() {
         foreach($this->routes as $route => $params) {
             $route_preg = $this->pregRoute($route);
@@ -106,7 +106,7 @@ class Router {
         $this->params = $params;
     }
 
-    /** функция для извлечения динамических параметров из uri по маске роута */
+    /** The method that parse an uri and gets dynamic params from it */
     private function getDynamicParams($route) {
         if (!strpos($route, '{')) return false;
         $dynamicParams = [];
@@ -124,11 +124,12 @@ class Router {
     }
 
     private function parseParam($route, $uri, $pos) {
-        // Начальная точка для извлечения параметра
+        //Start point for searching
         $loopingPos = $pos;
         $keyLength = 0;
 
-        // Ищем конечную точку для извлечения параметра
+        //Searcing the closing tag for dynamic param key
+
         $closeTagFound = false;
         while (!$closeTagFound) {
             $loopingPos++;
@@ -141,7 +142,7 @@ class Router {
 
         $paramKey = substr($route, $pos + 1, $keyLength - 1);
 
-        //Ищем конечную точку для извлечения значения параметра из URI
+        //Searcing the closing tag for dynamic param value
         $cutStartPos = $pos - 1;
         $cutLoopingPos = $cutStartPos;
 
@@ -158,7 +159,7 @@ class Router {
             if ($valueLength > static::MAX_URI_LENGTH) return false;
         }
 
-        // Если сразу же нашелся закрывающийся слеш, значит значение длинной в 1 символ
+        // if the value has one symbol and it is enclosed by '/', set it length as 1
         if ($valueLength == 1) {
             $valueLength = 1;
         } else {
