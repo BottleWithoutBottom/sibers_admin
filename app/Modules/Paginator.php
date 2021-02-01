@@ -2,6 +2,7 @@
 
 namespace App\Modules;
 use App\Modules\PaginatorBuilder;
+use App\Core\Request;
 
 class Paginator {
     public CONST QUERY = 'PAGE';
@@ -125,9 +126,20 @@ class Paginator {
     }
 
     public static function createHref($uri, $page) {
-        //вырезаем предыдущий get-запрос, если таковой имеется
-        $uri = preg_replace('#^?' . static::QUERY . '=' . '[0-9]*' . '$#', '', $uri);
-        return $uri . '?' . static::QUERY . '=' . $page;
-    }
+        $request = Request::getInstance();
+        $preparedUri = $uri;
 
+        //if there is no any other GET queries, set ? symbol before uri
+        if (empty($request->getQueryList())) {
+            $preparedUri .= '?';
+        } elseif (empty($request->getQuery(static::QUERY))) {
+            $preparedUri .= '&';
+        }
+
+        //cut out previos PAGE= query to set the new one
+        $preparedUri = preg_replace('#' . static::QUERY . '=' . '[0-9]*' . '#', '', $preparedUri);
+        $preparedUri .= static::QUERY . '=' . $page;
+
+        return $preparedUri;
+    }
 }

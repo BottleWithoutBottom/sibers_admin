@@ -3,11 +3,12 @@
 /** @var array $users */
 /** @var string $page */
 /** @var string $paginator */
+/** @var string $sorter */
 ?>
 
 <div<?= $page ? ' class="' . $page . '-page' . '"' : '' ?>>
     <h1><?= $title ?></h1>
-
+    <?= $sorter; ?>
     <div class="users-list">
         <? if (!empty($users)): ?>
             <? foreach($users as $user):

@@ -8,6 +8,7 @@ use App\Mvc\Views\View;
 use App\Core\Request;
 use App\Modules\Paginator;
 use App\Core\QueryBuilder\PdoQueryBuilder;
+use App\Modules\Sorter;
 
 class AdminController extends AbstractController {
 
@@ -20,6 +21,8 @@ class AdminController extends AbstractController {
         $usersCount = $model->getUsersCount();
         $request = Request::getInstance();
         $uri = $request->getUri();
+
+        // set the value of paginator by get-query or as 1;
         $currentPage = $request->getQuery(Paginator::QUERY) ?: 1;
         $paginator = new Paginator($usersCount, 2, $currentPage, $uri);
         $paginator->generate();
@@ -29,10 +32,26 @@ class AdminController extends AbstractController {
             PdoQueryBuilder::FIRST_ROW => $firstRow,
             PdoQueryBuilder::LAST_ROW => $lastRow,
         ];
+
         $users = $model->getUsers($limit);
+
+        //Sorting by firstname
+        $sorterFields = array_map(function($user) {
+            return $user->firstname;
+        }, $users);
+
+        $sorterParams = [
+            Sorter::TITLE => User::FIRSTNAME,
+            Sorter::NAME => User::FIRSTNAME, Sorter::VALUES => $sorterFields,
+        ];
+
+        $availableFields = [User::FIRSTNAME, User::LASTNAME, User::STATUS];
+        $sorter = new Sorter($uri, [User::FIRSTNAME => $sorterParams], $availableFields);
+        $sorter->generate();
         $this->view->render('Users list', [
             'users' => $users,
-            'paginator' => $paginator->getHtml()
+            'paginator' => $paginator->getHtml(),
+            'sorter' => $sorter->getHtml(),
         ],
         'users-list');
     }
