@@ -161,8 +161,6 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
                 $sql .= ' LIMIT ' . $limit[static::FIRST_ROW];
             } elseif(count($limit) == 2) {
 
-                if ($limit[static::FIRST_ROW] == $limit[static::LAST_ROW]) $limit[static::FIRST_ROW] -= 1;
-
                 $sql .= ' LIMIT ' . $limit[static::FIRST_ROW] . ',' . $limit[static::LAST_ROW];
             }
         }

@@ -4,12 +4,12 @@ return [
         'controller' => 'MainController',
         'action' => 'index',
     ],
-    '/admin/.*' => [
+    '/admin/[^\/]*' => [
         'controller' => 'AdminController',
         'action' => 'index',
 
         'children' => [
-            '/admin/list/.*' => [
+            '/admin/list/[^\/]*' => [
                 'controller' => 'AdminController',
                 'action' => 'index',
 

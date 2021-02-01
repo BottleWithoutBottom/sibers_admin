@@ -102,9 +102,10 @@ class Paginator {
      */
     public function setFirstRow() {
         if ($this->getCurrentPage() == 1) {
-            $this->firstRow = 1;
+            $this->firstRow = 0;
         } else {
-            $this->firstRow = $this->getCurrentPage() * $this->getItemsToShow();
+            $this->firstRow = $this->getCurrentPage() * $this->getItemsToShow() - $this->getItemsToShow();
+
         }
     }
 
@@ -119,13 +120,13 @@ class Paginator {
      * @param mixed $lastRow
      */
     public function setLastRow() {
-        $this->lastRow = $this->getFirstRow() + $this->getItemsToShow() - 1;
+        $this->lastRow = $this->getItemsToShow();
         return true;
     }
 
     public static function createHref($uri, $page) {
         //вырезаем предыдущий get-запрос, если таковой имеется
-        $uri = preg_replace('#^\?' . static::QUERY . '=' . '[0-9]*' . '$#', '', $uri);
+        $uri = preg_replace('#^?' . static::QUERY . '=' . '[0-9]*' . '$#', '', $uri);
         return $uri . '?' . static::QUERY . '=' . $page;
     }
 

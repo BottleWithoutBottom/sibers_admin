@@ -21,15 +21,14 @@ class AdminController extends AbstractController {
         $request = Request::getInstance();
         $uri = $request->getUri();
         $currentPage = $request->getQuery(Paginator::QUERY) ?: 1;
-        $paginator = new Paginator($usersCount, 1, $currentPage, $uri);
+        $paginator = new Paginator($usersCount, 2, $currentPage, $uri);
         $paginator->generate();
         $firstRow = $paginator->getFirstRow();
         $lastRow = $paginator->getLastRow();
         $limit = [
             PdoQueryBuilder::FIRST_ROW => $firstRow,
+            PdoQueryBuilder::LAST_ROW => $lastRow,
         ];
-
-        if ($lastRow >= $usersCount) $limit[PdoQueryBuilder::LAST_ROW] = $usersCount;
         $users = $model->getUsers($limit);
         $this->view->render('Users list', [
             'users' => $users,
