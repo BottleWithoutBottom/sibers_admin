@@ -2,6 +2,7 @@
 
 namespace App\Core\QueryBuilder;
 use App\Core\DBDriver;
+use App\Modules\Sorter;
 use PDO;
 use Exception;
 
@@ -40,9 +41,9 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
      * make it possible to filter data,
      * by passing the filter in format ['key', 'condition', 'value']
      */
-    public function FROMoperator($tableName, $filter, $operator, $limit = []) {
+    public function FROMoperator($tableName, $filter, $operator, $limit = [], $sort = []) {
+//        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($sort);echo("</pre>");die();
         if (empty($tableName)) static::emptyTableException();
-
         $sql = $operator . ' FROM ' . $tableName;
         if (count($filter) === static::OPERATOR_ARRAY_COUNT) {
             $key = $filter[0];
@@ -51,12 +52,22 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
             if (in_array($operand, static::AVAILABLE_OPERANDS)) {
                 $sql .= ' WHERE ' . $key . ' ' . $operand . ' ?';
 
+                if (!empty($sort)) {
+                    $sql = $this->setSort($sql, $sort);
+                }
+
                 if (!empty($limit)) {
                     $sql = $this->setLimit($sql, $limit);
                 }
                 $this->query($sql, [$value]);
             }
         } else {
+
+
+            if (!empty($sort)) {
+                $sql = $this->setSort($sql, $sort);
+            }
+
             if (!empty($limit)) {
                 $sql = $this->setLimit($sql, $limit);
             }
@@ -73,7 +84,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
      * @param array $limit ['firstRow' => number, 'lastRow' => number]
      * @return AbstractQueryBuilder
      */
-    public function select($tableName, $filter = [], $selectedFields = [], $limit = []) {
+    public function select($tableName, $filter = [], $selectedFields = [], $limit = [], $sort = []) {
         if (empty($tableName)) static::emptyTableException();
 
         $selectedFieldsString = '*';
@@ -82,8 +93,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
         }
 
         $operator = 'SELECT ' . $selectedFieldsString;
-
-        return $this->FROMoperator($tableName, $filter, $operator, $limit);
+        return $this->FROMoperator($tableName, $filter, $operator, $limit, $sort);
     }
 
     public function delete($tableName, $filter) {
@@ -155,7 +165,7 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
     }
 
     protected function setLimit($sql, $limit = []) {
-        if (empty($sql)) die('Пустой запрос');
+        if (empty($sql)) die('An empty query');
         if (count($limit)) {
             if (count($limit) == 1) {
                 $sql .= ' LIMIT ' . $limit[static::FIRST_ROW];
@@ -164,6 +174,26 @@ class PdoQueryBuilder extends AbstractQueryBuilder {
                 $sql .= ' LIMIT ' . $limit[static::FIRST_ROW] . ',' . $limit[static::LAST_ROW];
             }
         }
+        return $sql;
+    }
+
+    public function setSort($sql, $sort) {
+        if (empty($sort[Sorter::SORT]) || empty($sort[Sorter::SORT_FIELDS])) return false;
+        $sortString = $sort[Sorter::SORT];
+        $fields = $sort[Sorter::SORT_FIELDS];
+        $sqlWithOrder = $sql;
+        if (count($fields)) {
+            //generate ORDER BY string
+            $sqlWithOrder .= ' ORDER BY ';
+            $orderStrig = '';
+            foreach($fields as $field) {
+                $orderString .= $field . ' ' . $sortString . ',';
+            }
+
+            $orderString = rtrim($orderString, ',');
+            return $sqlWithOrder . $orderString;
+        }
+
         return $sql;
     }
 

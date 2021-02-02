@@ -1,29 +1,32 @@
 <?php
 
 namespace App\Modules;
+use App\Core\Request;
 
 class Sorter {
-    public CONST ORDER = ['DESC' => 'Descending', 'ASC' => 'Ascending'];
+    public CONST ORDER = ['Descending' => 'DESC', 'Ascending' => 'ASC'];
     public CONST SORT = 'sort';
 
     public CONST TITLE = 'title';
     public CONST NAME = 'name';
     public CONST VALUES = 'values';
-    public CONST AVAILABLE_SORTINGS = 'available_sortings';
+    public const SORT_FIELDS = 'sort_fields';
+    public const SORT_FIELD_1 = 'sort_field_1';
+    public const SORT_FIELD_1_VALUE = 'Sorting by: ';
 
     protected $uri;
     protected $sorterBuilder;
     protected $params = [];
     protected $availableFields = [];
 
-    public function __construct($uri, $params = [], $availableFields = []) {
+    public function __construct($uri, $params = []) {
         $this->setUri($uri);
         $this->setParams($params);
-        $this->setAvailableFields($availableFields);
+        $this->setAvailableFields($params[static::VALUES]);
     }
 
     public function generate() {
-        $this->setSorterBuilder(new SortBuilder($this->getUri(), $this->getParams(), $this->getAvailableFields()));
+        $this->setSorterBuilder(new SortBuilder($this->getUri(), $this->getParams()));
         $this->getSorterBuilder()->generate();
     }
 
@@ -58,7 +61,7 @@ class Sorter {
      * [
      *  'title' => 'fieldTitle',
      *  'name' => 'fieldName'
-     *  'values' => ['value1', 'value2', 'value3'],
+     *  'values' => ['sort1', 'sort2', 'sort3'],
      * ]
      */
     public function setParam($sortField, $param) {
@@ -102,4 +105,24 @@ class Sorter {
     public function setAvailableFields(array $availableFields): void {
         $this->availableFields = $availableFields;
     }
+
+    /** method is loohing for sorting fields from GET-param */
+    public static function getSortFromQuery($availableFields = []) {
+        $request = Request::getInstance();
+        $queryList = $request->getQueryList();
+        $sort = $queryList[static::SORT];
+        if (!empty($sort) && in_array($sort, static::ORDER)) {
+            $res[static::SORT] = $sort;
+
+            foreach($queryList as $queryName => $query) {
+                if ($queryName == static::SORT_FIELD_1) {
+                    $res[static::SORT_FIELDS][$queryName] = $query;
+                }
+            }
+            return $res;
+        }
+
+        return false;
+    }
+
 }

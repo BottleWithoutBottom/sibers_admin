@@ -33,20 +33,24 @@ class AdminController extends AbstractController {
             PdoQueryBuilder::LAST_ROW => $lastRow,
         ];
 
-        $users = $model->getUsers($limit);
+        $availableFields = [User::FIRSTNAME, User::LASTNAME, User::STATUS];
+        //Sort users by GET-params
+        $foundSort = Sorter::getSortFromQuery($availableFields);
+//        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($foundSort);echo("</pre>");die();
+        $users = $model->getUsers($limit, $foundSort);
 
-        //Sorting by firstname
+        //Let's generate The Sorter by user's firstname's and show the Sorter in HTML
         $sorterFields = array_map(function($user) {
             return $user->firstname;
         }, $users);
 
         $sorterParams = [
-            Sorter::TITLE => User::FIRSTNAME,
-            Sorter::NAME => User::FIRSTNAME, Sorter::VALUES => $sorterFields,
+            Sorter::TITLE => Sorter::SORT_FIELD_1_VALUE,
+            Sorter::NAME => Sorter::SORT_FIELD_1,
+            Sorter::VALUES => $availableFields,
         ];
 
-        $availableFields = [User::FIRSTNAME, User::LASTNAME, User::STATUS];
-        $sorter = new Sorter($uri, [User::FIRSTNAME => $sorterParams], $availableFields);
+        $sorter = new Sorter($uri, $sorterParams);
         $sorter->generate();
         $this->view->render('Users list', [
             'users' => $users,

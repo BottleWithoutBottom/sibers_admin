@@ -15,10 +15,10 @@ class SortBuilder {
     protected $method = 'GET';
     protected $availableFields = [];
 
-    public function __construct($uri, $params = [], $availableFields = []) {
+    public function __construct($uri, $params = []) {
         $this->setUri($uri);
         $this->setParams($params);
-        $this->setAvailableFields($availableFields);
+        $this->setAvailableFields($params[Sorter::VALUES]);
     }
 
     public function generate() {
@@ -29,25 +29,25 @@ class SortBuilder {
         $closeFormTag = '</form>';
         $closeWrapperTag = '</div>';
 
-
-        foreach ($this->getParams() as $sortField => $param) {
-            if (!in_array($sortField, $this->getAvailableFields()) ||empty($param[Sorter::VALUES])) continue;
-            $headerFormTag = '<h2>Sort by: ' . $param[Sorter::TITLE] . '</h2>';
+        $params = $this->getParams();
+        if (!empty($params[Sorter::VALUES]) && !empty($params[Sorter::NAME])) {
+            $headerFormTag = '<h2>' . $params[Sorter::TITLE] . '</h2>';
             $optionsString = '';
-            $select = '<select name="' . $param[Sorter::NAME] . '">';
+            $select = '<select name="' . $params[Sorter::NAME] . '">';
             $selectClose = '</select>';
-
-            foreach ($param[Sorter::VALUES] as $value) {
+            foreach ($params[Sorter::VALUES] as $value) {
                 $optionsString .= '<option value="' . $value .'">' . $value .'</option>';
+
             }
             $fullSelectString = $headerFormTag . $select . $optionsString . $selectClose;
+
+            $fullHTMLString .= $openWrapperTag . $openFormTag;
+            $fullHTMLString .= $fullSelectString . $this->getSorterSelect() . $this->getConfirmBtn()
+                . $closeFormTag . $closeWrapperTag;
+
+            $this->setHtml($fullHTMLString);
         }
 
-        $fullHTMLString .= $openWrapperTag . $openFormTag;
-        $fullHTMLString .= $fullSelectString . $this->getSorterSelect() . $this->getConfirmBtn()
-            . $closeFormTag . $closeWrapperTag;
-
-        $this->setHtml($fullHTMLString);
     }
 
     public function getSorterSelect() {
@@ -57,7 +57,7 @@ class SortBuilder {
         $optionsString = '';
 
         foreach (Sorter::ORDER as $key => $value) {
-            $optionsString .= '<option value="'. $key .'">' . $value . '</option>';
+            $optionsString .= '<option value="'. $value .'">' . $key . '</option>';
         }
 
         return $openSelectTag . $optionsString . $closeSelectTag;
