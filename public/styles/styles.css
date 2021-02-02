@@ -94,6 +94,13 @@
     border: none;
 }
 
+.select-wrapper {
+    padding: 10px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
 .preloader {
     border-radius: 50%;
 }

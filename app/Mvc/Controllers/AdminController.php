@@ -36,7 +36,6 @@ class AdminController extends AbstractController {
         $availableFields = [User::FIRSTNAME, User::LASTNAME, User::STATUS];
         //Sort users by GET-params
         $foundSort = Sorter::getSortFromQuery($availableFields);
-//        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($foundSort);echo("</pre>");die();
         $users = $model->getUsers($limit, $foundSort);
 
         //Let's generate The Sorter by user's firstname's and show the Sorter in HTML

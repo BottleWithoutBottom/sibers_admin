@@ -63,6 +63,19 @@ class UserManager {
 
     }
 
+    public function logout() {
+        $request = Request::getInstance();
+        $cookie = $request->getCookie(static::SESSID);
+        $session = $request->getSession(static::SESSID);
+
+        if ($cookie || $session) {
+            if ($cookie) $request->expireCookie(static::SESSID);
+            if ($session) $request->expireSession(static::SESSID);
+        }
+
+        header('Location: /');
+    }
+
     public function hashPassword($password) {
         if (empty($password)) return false;
 

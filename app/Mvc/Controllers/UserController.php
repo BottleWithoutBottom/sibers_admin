@@ -40,4 +40,14 @@ class UserController extends AbstractController {
             var_dump('Cannot sign up. Check your data one more time');
         }
     }
+
+    public function logout() {
+        $userManager = new UserManager();
+
+        if ($userManager->authorizeByToken()) {
+            $userManager->logout();
+        } else {
+            return false;
+        }
+    }
 }
