@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Mvc\Models;
-use App\Mvc\Models\User;
 
 class Admin extends AbstractModel {
 
     public function getUsers($limit = [], $sort = []) {
-//        while(ob_get_length()){ob_end_clean();}echo("<pre>");print_r($sort);echo("</pre>");die();
         return $this->getQueryBuilder()->select(User::TABLE_NAME, [], [], $limit, $sort)->getResults();
     }
 
